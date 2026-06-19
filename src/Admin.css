@@ -1,0 +1,122 @@
+.admin-dashboard {
+  
+  display: flex;
+  font-family: Arial, sans-serif;
+  height: 100vh;
+  background-color: #f4f4f4;
+}
+
+.sidebar {
+  width: 220px;
+background: linear-gradient(to right,#121212 , #272727,#4a4949);
+  color: white;
+  padding: 20px;
+}
+
+.sidebar-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.sidebar-nav a {
+  display: block;
+  color: white;
+  padding: 10px 0;
+  text-decoration: none;
+  font-size:1.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-nav a:hover {
+  background-color: #34495e;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.dashboard-header {
+  background-color: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+
+.stats-section {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  flex: 1;
+  min-width: 200px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card h3 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.stat-card p {
+  font-size: 24px;
+  color: #007bff;
+}
+
+.activity-section {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+.editbutton{
+ padding: 6px 12px;
+  margin-right: 8px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+}
+.deletebutton {
+  padding: 6px 12px;
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.manageh1{
+  font-size: 2.5rem;
+}
+
+ @media only screen and (max-width: 600px) {
+  .editbutton,
+  .deletebutton {
+    padding: 2px 1px;
+    font-size: 14px;
+    display: block;
+    width: 100%;
+    margin-bottom: 6px;
+  }
+  .manageh1{
+    font-size: 2rem;
+  }
+}
+.managetable{
+   
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    
+
+}
+
