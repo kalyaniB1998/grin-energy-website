@@ -10,3 +10,7 @@ backend/.env
 
 build/
 backend/uploads/
+
+frontend/node_modules/
+
+tripe
