@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../../axios";
 import AdminHeader from "./AdminHeader";
 
 const Main = () => {
@@ -8,19 +8,31 @@ const [enquiryCount, setEnquiryCount] = useState(0);
 const [orderCount, setOrderCount] = useState(0);
   useEffect(() => {
     // fetch products
-  axios.get("http://localhost:8000/products/count")
-.then((res) => setProductCount(res.data.count))
-      .catch((err) => console.error("Error fetching product count:", err));
+//   axios.get("http://localhost:8000/products/count")
+// .then((res) => setProductCount(res.data.count))
+//       .catch((err) => console.error("Error fetching product count:", err));
 
-    // fetch orders
-   axios.get("http://localhost:8000/orders/count")
-      .then((res) => setOrderCount(res.data.count))
-      .catch((err) => console.error("Error fetching order count:", err));
+//     // fetch orders
+//    axios.get("http://localhost:8000/orders/count")
+//       .then((res) => setOrderCount(res.data.count))
+//       .catch((err) => console.error("Error fetching order count:", err));
 
-    // fetch enquiry
-   axios.get("http://localhost:8000/enquiry/count")
-      .then((res) => setEnquiryCount(res.data.count))
-      .catch((err) => console.error("Error fetching enquiry count:", err));
+//     // fetch enquiry
+//    axios.get("http://localhost:8000/enquiry/count")
+//       .then((res) => setEnquiryCount(res.data.count))
+//       .catch((err) => console.error("Error fetching enquiry count:", err));
+
+axios.get("/products/count")
+  .then((res) => setProductCount(res.data.count))
+  .catch((err) => console.error("Error fetching product count:", err));
+
+axios.get("/orders/count")
+  .then((res) => setOrderCount(res.data.count))
+  .catch((err) => console.error("Error fetching order count:", err));
+
+axios.get("/enquiry/count")
+  .then((res) => setEnquiryCount(res.data.count))
+  .catch((err) => console.error("Error fetching enquiry count:", err));
   }, []);
 
 

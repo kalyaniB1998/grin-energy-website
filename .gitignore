@@ -1,16 +1,23 @@
+# Environment files
+.env
+.env.*
+!.env.example
 
-# backend/.env
-# .env
-# node_modules
+# Node modules
 node_modules/
+frontend/node_modules/
 backend/node_modules/
 
-.env
-backend/.env
-
+# React build
 build/
+frontend/build/
+
+# Backend uploaded files
 backend/uploads/
 
-frontend/node_modules/
+# Logs
+*.log
 
-tripe
+# OS files
+.DS_Store
+Thumbs.db

@@ -60,11 +60,17 @@ function ManageProduct() {
             <tr key={prod._id}>
               <td style={cellStyle}>
                 {/* <img src={`http://localhost:8000${prod.imageURL}`} alt="product" width="60" /> */}
-                <img
+                {/* <img
                       src={prod.image}
                       alt={prod.title}
                     
-                    />
+                    /> */}
+
+                    <img
+                src={`${axios.defaults.baseURL}${prod.imageURL}`}
+                alt={prod.title}
+                width="60"
+              />
               </td>
               <td style={cellStyle}>{prod.title}</td>
               <td style={{width:"300px",height:"200px",textAlign:"center", overflow:"auto"}}>{prod.description}</td>

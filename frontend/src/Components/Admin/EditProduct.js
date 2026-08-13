@@ -158,7 +158,8 @@ function EditProduct() {
           <div style={{ marginTop: "10px" }}>
             <p>Current Image:</p>
             <img
-              src={`http://localhost:8000${product.imageURL}`}
+             src={`${process.env.REACT_APP_API_URL}${product.imageURL}`}
+              //  src={`http://localhost:8000${product.imageURL}`}
               alt="Current"
               style={{ width: "120px", borderRadius: "8px" }}
             />

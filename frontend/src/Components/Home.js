@@ -246,7 +246,7 @@ Performance, Built for Sustainability
         <p>📧 Email: info@grinenergy.in</p>
       </section>
       
-      <Footer/>
+      <Footer></Footer>
     </div>
   );
 }

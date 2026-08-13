@@ -42,7 +42,8 @@ function Product() {
              key={product._id}
                id={product._id}
               // image={product.imageURL}
-                image={`http://localhost:8000${product.imageURL}`} 
+              image={`${process.env.REACT_APP_API_URL}${product.imageURL}`}
+                // image={`http://localhost:8000${product.imageURL}`} 
               //  img src={`${API.defaults.baseURL}${product.image}`} alt={product.title} 
               price={product.price}
              rating={product.averageRating}

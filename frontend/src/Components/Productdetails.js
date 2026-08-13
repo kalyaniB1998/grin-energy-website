@@ -76,8 +76,8 @@ function ProductDetails() {
           
         <div className="details-header">
          <Image
-             src={`http://localhost:8000${product.imageURL}`}
-            //  src={`${process.env.REACT_APP_API_URL}${product.image}`}
+            //  src={`http://localhost:8000${product.imageURL}`}
+              src={`${process.env.REACT_APP_API_URL}${product.image}`}
             alt={product.title}
               // style={{ width: "300px", height: "auto" }}
           />

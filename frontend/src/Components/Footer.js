@@ -4,7 +4,12 @@ import styled from 'styled-components'
 function Footer() {
   return (
     <Nav>
-        <p  className="hero-subtitle">© 2025 <strong className='grin'> GRIN ENERGY</strong>. All rights reserved.</p>
+        {/* <p  className="hero-subtitle">© 2025 <strong className='grin'> GRIN ENERGY</strong>. All rights reserved.</p> */}
+        <p className="hero-subtitle">
+  © {new Date().getFullYear()}{" "}
+  <strong className="grin">GRIN ENERGY</strong>. All rights reserved.
+</p>
+        
         <div>
           <a href="/Aboutus" 
         >About Us</a>
