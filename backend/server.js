@@ -64,54 +64,99 @@ const upload = multer({ storage });
 
 app.get("/", (req, res) => res.status(200).send("Home Page"));
 
-// add product
 
-// app.post("/products/add",upload.single('imageURL'), (req, res) => {
-//   const productDetail = req.body;
-//   productDetail.imageURL = req.file ? `/uploads/${req.file.filename}` : "";
-   
 
-//   console.log("Product Detail >>>>", productDetail);
+
+// app.post("/products/add", upload.single("image"), async(req, res) => {
+//   const { title, description, price,gst, rating, ...rest } = req.body;
+
+//   const customFields = {};
+//   for (const key in rest) {
+//     customFields[key] = rest[key];
+//   }
+
+//   const productDetail = {
+//     title,
+//     description,
+//     price,
+//     gst,
+//     rating,
+//     customFields,
+//     imageURL: req.file ? `/uploads/${req.file.filename}` : ""
+//   };
 
 //   Products.create(productDetail, (err, data) => {
 //     if (err) {
 //       res.status(500).send(err.message);
-//       console.log(err);
 //     } else {
 //       res.status(201).send(data);
 //     }
 //   });
 // });
 
+app.post("/products/add", upload.single("image"), async (req, res) => {
+   console.log("🔥 ADD PRODUCT API CALLED");
+  try {
+    console.log("Request Body:", req.body);
+    console.log("Uploaded File:", req.file);
+    const {
+      title,
+      description,
+      price,
+      gst,
+      rating,
+      customFields
+    } = req.body;
+    
+        const priceNumber = Number(price) || 0;
+    const gstNumber = Number(gst) || 0;
 
-app.post("/products/add", upload.single("image"), async(req, res) => {
-  const { title, description, price,gst, rating, ...rest } = req.body;
+     const gstAmount = (priceNumber * gstNumber) / 100;
+     const totalPrice = priceNumber + gstAmount;
 
-  const customFields = {};
-  for (const key in rest) {
-    customFields[key] = rest[key];
-  }
 
-  const productDetail = {
-    title,
-    description,
-    price,
-    gst,
-    rating,
-    customFields,
-    imageURL: req.file ? `/uploads/${req.file.filename}` : ""
-  };
+    let parsedCustomFields = {};
 
-  Products.create(productDetail, (err, data) => {
-    if (err) {
-      res.status(500).send(err.message);
-    } else {
-      res.status(201).send(data);
+    if (customFields) {
+      parsedCustomFields = JSON.parse(customFields);
     }
-  });
+
+    const productDetail = {
+      title,
+      description,
+      // price: Number(price),
+      // gst: Number(gst),
+      price: priceNumber,
+      gst: gstNumber,
+       gstAmount: gstAmount,
+      totalPrice: totalPrice,
+       rating: Number(rating) || 0,
+      customFields: parsedCustomFields,
+      imageURL: req.file
+        ? `/uploads/${req.file.filename}`
+        : ""
+    };
+console.log("Product going to MongoDB:");
+    console.log(productDetail);
+    const product = await Products.create(productDetail);
+     console.log("✅ PRODUCT SAVED:");
+    console.log(product);
+
+    res.status(201).json(
+      {
+      message: "Product added successfully",
+      product
+    });
+
+  } catch (err) {
+    console.error("Error adding product:", err);
+
+    res.status(500).json({
+      message: "Error adding product",
+      error: err.message
+    });
+  }
 });
-
-
 
 
 app.get("/products/get", (req, res) => {
@@ -416,48 +461,172 @@ app.post("/products/rate/:id", async (req, res) => {
   }
 });
 
+// app.put("/products/update/:id", upload.single("image"), async (req, res) => {
+//   try {
+//     const updatedData = {};
+
+//     if (req.body.title !== undefined && req.body.title !== "")
+//       updatedData.title = req.body.title;
+
+//     if (req.body.description !== undefined && req.body.description !== "")
+//       updatedData.description = req.body.description;
+
+//     if (req.body.price !== undefined && req.body.price !== "")
+//       updatedData.price = req.body.price;
+
+//     if (req.body.gst !== undefined && req.body.gst !== "") {
+//       updatedData.gst = Number(req.body.gst);
+//     }
+
+//     if (req.body.rating !== undefined && req.body.rating !== "")
+//       updatedData.rating = req.body.rating;
+
+//     if (req.file) {
+//       updatedData.imageURL = `/uploads/${req.file.filename}`;
+//     }
+
+//     console.log("Updated data:", updatedData);
+
+//     const updatedProduct = await Products.findByIdAndUpdate(
+//       req.params.id,
+//       { $set: updatedData },
+//       { new: true }
+//     );
+
+//     if (!updatedProduct) {
+//       return res.status(404).json({ message: "Product not found" });
+//     }
+
+//     res.json({ message: "Product updated", product: updatedProduct });
+
+//   } catch (err) {
+//     console.error("Error updating product:", err);
+//     res.status(500).json({ message: "Server error during update" });
+//   }
+// });
+
 app.put("/products/update/:id", upload.single("image"), async (req, res) => {
   try {
+
+    console.log("================================");
+    console.log("UPDATE PRODUCT");
+    console.log("Product ID:", req.params.id);
+    console.log("Request Body:", req.body);
+    console.log("File:", req.file);
+    console.log("================================");
+ 
+    // Find existing product
+    const existingProduct = await Products.findById(req.params.id);
+
+    if (!existingProduct) {
+      return res.status(404).json({
+        message: "Product not found"
+      });
+    }
     const updatedData = {};
 
-    if (req.body.title !== undefined && req.body.title !== "")
+    // TITLE
+      // TITLE
+    if (
+      req.body.title !== undefined &&
+      req.body.title !== ""
+    ) {
       updatedData.title = req.body.title;
-
-    if (req.body.description !== undefined && req.body.description !== "")
-      updatedData.description = req.body.description;
-
-    if (req.body.price !== undefined && req.body.price !== "")
-      updatedData.price = req.body.price;
-
-    if (req.body.gst !== undefined && req.body.gst !== "")
-      updatedData.gst = req.body.gst;
-
-    if (req.body.rating !== undefined && req.body.rating !== "")
-      updatedData.rating = req.body.rating;
-
-    if (req.file) {
-      updatedData.image = req.file.filename;
     }
 
+    // DESCRIPTION
+    if (
+      req.body.description !== undefined &&
+      req.body.description !== ""
+    ) {
+      updatedData.description = req.body.description;
+    }
+
+    // PRICE
+    if (
+      req.body.price !== undefined &&
+      req.body.price !== ""
+    ) {
+      updatedData.price = Number(req.body.price);
+    }
+
+    // GST
+    if (
+      req.body.gst !== undefined &&
+      req.body.gst !== ""
+    ) {
+      updatedData.gst = Number(req.body.gst);
+    }
+
+    // IMAGE
+    if (req.file) {
+      updatedData.imageURL =
+        `/uploads/${req.file.filename}`;
+    }
+
+    // =========================================
+    // GST CALCULATION
+    // =========================================
+
+    const finalPrice =
+      updatedData.price !== undefined
+        ? updatedData.price
+        : Number(existingProduct.price);
+
+    const finalGST =
+      updatedData.gst !== undefined
+        ? updatedData.gst
+        : Number(existingProduct.gst);
+
+    const gstAmount =
+      (finalPrice * finalGST) / 100;
+
+    const totalPrice =
+      finalPrice + gstAmount;
+
+    updatedData.gstAmount = gstAmount;
+    updatedData.totalPrice = totalPrice;
+
+    console.log("================================");
+    console.log("DATA GOING TO MONGODB");
+    console.log(updatedData);
+    console.log("================================");
+    
     const updatedProduct = await Products.findByIdAndUpdate(
       req.params.id,
-      { $set: updatedData },
-      { new: true }
+      {
+        $set: updatedData
+      },
+      {
+        new: true,
+        runValidators: true
+      }
     );
 
     if (!updatedProduct) {
-      return res.status(404).json({ message: "Product not found" });
+      return res.status(404).json({
+        message: "Product not found"
+      });
     }
 
-    res.json({ message: "Product updated", product: updatedProduct });
+    console.log("Updated Product:", updatedProduct);
+
+    res.status(200).json({
+      message: "Product updated successfully",
+      product: updatedProduct
+    });
 
   } catch (err) {
-    console.error("Error updating product:", err);
-    res.status(500).json({ message: "Server error during update" });
+
+    console.error("UPDATE ERROR:", err);
+
+    res.status(500).json({
+      message: "Server error during update",
+      error: err.message
+    });
+
   }
 });
-
-
 // Enquiry POST route
 app.post("/enquiry/post", async (req, res) => {
     console.log("Received data:", req.body);

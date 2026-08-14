@@ -21,7 +21,7 @@ function Header() {
         <a href="/aboutus">About Us</a>
         <a href="/contactus">Contact Us</a>
          {/* ✅ Cart link with basket count */}
-        <Link to="/cart">🛒  ({basket?.length})</Link>
+        {/* <Link to="/cart">🛒  ({basket?.length})</Link> */}
       </Menu>
     </Nav>
   );

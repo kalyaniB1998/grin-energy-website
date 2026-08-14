@@ -35,7 +35,7 @@ function ProductDetails() {
       item: {
         id: product._id,
         title: product.title,
-       image: `http://localhost:8000${product.imageURL}`,
+       image: `${process.env.REACT_APP_API_URL}${product.imageURL}`,
         // image: product.image,
         price: product.price,
         gst: gst,
@@ -52,6 +52,65 @@ function ProductDetails() {
   // navigate(`/inquiry/${product._id}`);
   navigate("/contactus");
 };
+// Prepare custom specifications
+const getSpecifications = () => {
+  if (!product || !product.customFields) {
+    return {};
+  }
+
+  let fields = product.customFields;
+
+  // If customFields is stored as a JSON string
+  if (typeof fields === "string") {
+    try {
+      fields = JSON.parse(fields);
+    } catch (error) {
+      console.error("Error parsing customFields:", error);
+      return {};
+    }
+  }
+
+  // Handle old data where customFields contains another customFields
+  if (fields.customFields) {
+    let nestedFields = fields.customFields;
+
+    if (typeof nestedFields === "string") {
+      try {
+        nestedFields = JSON.parse(nestedFields);
+      } catch (error) {
+        console.error("Error parsing nested customFields:", error);
+        return {};
+      }
+    }
+
+    fields = nestedFields;
+  }
+
+  // Remove fields that should NOT be specifications
+  const excludedFields = [
+    "gst",
+    "gstAmount",
+    "totalPrice",
+    "price",
+    "rating",
+    "title",
+    "description",
+    "image",
+    "imageURL"
+  ];
+
+  const specifications = {};
+
+  Object.entries(fields).forEach(([key, value]) => {
+    if (!excludedFields.includes(key)) {
+      specifications[key] = value;
+    }
+  });
+
+  return specifications;
+};
+
+const specifications = getSpecifications();
 
   return (
      <Div>
@@ -119,7 +178,7 @@ function ProductDetails() {
 )}
           {/* <p><strong>Price:</strong> ₹{product.price}</p> */}
          <Rating
-  value={product.rating}
+  value={Number(product.averageRating) || 0}
   precision={0.5}
   readOnly
 />
@@ -150,17 +209,88 @@ function ProductDetails() {
 
           {/* 🔽🔽 Use this to show custom fields 🔽🔽 */}
         
-          {product.customFields && (
+          {/* {product.customFields && (
              <div className="spec-section" >
               <p style={{margin:"5%"}}><strong>Specifications:</strong></p>
-              {/* <div className="spec-grid" >
-                 {Object.entries(product.customFields).map(([key, value]) => (
-                <p key={key}> {key}  :-  {value}</p>
-              ))}
-              </div> */}
+              
               </div>
-          )}
-          
+          )} */}
+
+          {/* Specifications */}
+{/* {product.customFields &&
+  Object.keys(product.customFields).length > 0 && (
+    <div className="spec-section">
+      <h2>Specifications</h2>
+
+      <div className="spec-grid">
+        {Object.entries(product.customFields).map(([key, value]) => (
+          <div className="spec-row" key={key}>
+            <div className="spec-key">
+              {key}
+            </div>
+
+            <div className="spec-value">
+              {value}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+)} */}
+
+{/* {product.customFields &&
+  Object.entries(product.customFields).length > 0 && (
+    <div className="spec-section">
+
+      <h2>Specifications</h2>
+
+      <div className="spec-grid">
+        {Object.entries(product.customFields).map(([key, value]) => (
+          <div className="spec-row" key={key}>
+
+            <div className="spec-key">
+              {key}
+            </div>
+
+            <div className="spec-value">
+              {value}
+            </div>
+
+          </div>
+        ))}
+      </div>
+
+    </div>
+)} */}
+       {Object.keys(specifications).length > 0 && (
+  <SpecSection>
+    <h2>Specifications</h2>
+
+    <SpecGrid>
+      {Object.entries(specifications).map(([key, value]) => (
+        <SpecRow key={key}>
+
+          <SpecKey>
+            {key}
+          </SpecKey>
+
+          <SpecValue>
+            {String(value)
+              .split("\\n")
+              .map((line, index) => (
+                <React.Fragment key={index}>
+                  {line}
+                  {index <
+                    String(value).split("\\n").length - 1 && <br />}
+                </React.Fragment>
+              ))}
+          </SpecValue>
+
+        </SpecRow>
+      ))}
+    </SpecGrid>
+  </SpecSection>
+)}   
         </div>
         </div>
        
@@ -259,6 +389,83 @@ const InquiryButton = styled.button`
    margin-left:70px;
   &:hover{
     background:#1e7e34;
+  }
+`;
+const SpecSection = styled.div`
+  margin-top: 40px;
+  width: 100%;
+
+  h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #fdfbfb;
+    padding:2px;
+     border-radius: 8px;
+    background: #48474d;
+  }
+
+  @media (max-width: 768px) {
+    margin-top: 30px;
+
+    h2 {
+      font-size: 24px;
+    }
+  }
+`;
+
+const SpecGrid = styled.div`
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+`;
+
+
+const SpecRow = styled.div`
+  display: flex;
+  border-bottom: 1px solid #ddd;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+const SpecKey = styled.div`
+  width: 35%;
+  padding: 16px 18px;
+
+  font-weight: bold;
+  color: #0a0a0a;
+
+  background: #f5f5f5;
+
+  word-break: break-word;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 12px 15px;
+  }
+`;
+
+const SpecValue = styled.div`
+  width: 65%;
+  padding: 16px 18px;
+
+  color: #333;
+  background: white;
+
+  line-height: 1.6;
+  white-space: normal;
+  word-break: break-word;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 12px 15px;
   }
 `;
 

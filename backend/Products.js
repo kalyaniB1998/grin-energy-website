@@ -5,13 +5,8 @@ const ProductSchema = mongoose.Schema({
   imageURL: String,
    description: String,
   price: Number,
-  // rating: Number,
-  // rating: {
-  //   type: Number,
-  //   default: 0, // default rating if not yet rated
-  // },
-
-ratings: [
+    
+  ratings: [
   {
     userId: String,
     rating: Number,
@@ -27,9 +22,21 @@ averageRating: {
     required: true,
     default: 0,
   },
+   gstAmount: {
+    type: Number,
+    default: 0
+  },
+
+  totalPrice: {
+    type: Number,
+    default: 0
+  },
+
 customFields: {
-    type: Map,
-    of: String
+   type: mongoose.Schema.Types.Mixed,
+     type: Map,
+    of: String,
+   
   }  
 });
 
