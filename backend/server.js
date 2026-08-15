@@ -1,4 +1,4 @@
-// require("dotenv").config();
+ require("dotenv").config();
 // console.log("KEY ID:", process.env.RAZORPAY_KEY_ID);
 // console.log("KEY SECRET:", process.env.RAZORPAY_KEY_SECRET);
 const express = require("express");
@@ -32,17 +32,25 @@ app.use(cors());
 app.use(bodyParser.json());
 // connection url
 
-const connection_url =
-  "mongodb+srv://kalyaniambhore98:G-9140K-98@cluster0.qpkiom4.mongodb.net/grin_energy?retryWrites=true&w=majority";
+// const connection_url =
+//   "mongodb+srv://kalyaniambhore98:G-9140K-98@cluster0.qpkiom4.mongodb.net/grin_energy?retryWrites=true&w=majority";
 
-mongoose.connect(connection_url, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
- .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+// mongoose.connect(connection_url, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// })
+//  .then(() => console.log("MongoDB connected"))
+//   .catch((err) => console.error("MongoDB connection error:", err));
 
+const connection_url = process.env.MONGO_URI;
 
+mongoose.connect(connection_url)
+  .then(() => {
+    console.log("MongoDB connected successfully");
+  })
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+  });
 
   
 app.use("/uploads",express.static('uploads'));
