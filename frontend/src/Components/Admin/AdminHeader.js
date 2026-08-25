@@ -25,6 +25,7 @@ const handleLogout = () => {
          <a href="/Addproduct">Add Products</a>
         <a href="/aboutus">About Us</a>
         <a href="/contactus">Contact Us</a>
+       
           <Button onClick={handleLogout} style={{ marginLeft: "20px" }}>
               Logout
             </Button>

@@ -419,7 +419,14 @@ formData.append("image", image);
           src="/GRIN ENERGY.png"
           alt="GRIN ENERGY"
         />
-      </Logo>
+      </Logo> <a href="/ManageProduct" style={{ display: "block", textAlign: "right" }}>
+  <img
+    src="../back.png"
+    style={{ width: "50px", height: "50px",  position: "sticky",
+  top:"0" }}
+    alt="Back"
+  />
+</a>
 
       <h2>Add Product</h2>
 
